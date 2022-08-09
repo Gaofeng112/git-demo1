@@ -1,0 +1,141 @@
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:21:41 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          #define SEG P3
+   5          
+   6          sbit E_RED=P2^0;      //东西红灯
+   7          sbit E_GREEN=P2^1;    //东西绿灯
+   8          sbit Yellow=P2^5;     //黄灯
+   9          sbit N_RED=P2^6;      //南北红灯
+  10          sbit N_GREEN=P2^7;    //南北绿灯
+  11          
+  12          
+  13          sbit HCA = P2^2;      //控制数码管的个位十位显示
+  14          sbit HCB = P2^3;
+  15          sbit HCC = P2^4;        
+  16          
+  17          uchar num=10,ge,shi;      //定义倒计时初始值，个位十位
+  18          uchar a=0;                //定义亮灯的四种情况  
+  19          uchar count=0;            //用来显示数码管的变量
+  20          uchar flag;               //看倒计时是否为1s
+  21          
+  22          //LED的9个数字
+  23          unsigned char code ledTab[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x
+             -71};
+  24          
+  25          
+  26          //1s延迟
+  27          void Delay_Ms(uint x){
+  28   1        uchar t;
+  29   1        while(x--)
+  30   1        {
+  31   2          for(t=50;t>0;t--);
+  32   2        }
+  33   1      }
+  34          
+  35          int0()interrupt 0
+  36          {
+  37   1        TR0=~TR0;
+  38   1      }
+  39          
+  40          
+  41          void T0INTinit() //定时器T0初始化为1s
+  42          {
+  43   1        TMOD=0x01;
+  44   1        TH0=(65536-50000)/256;
+  45   1        TL0=(65536-50000)%256;
+  46   1        EA=1;  
+  47   1        ET0=1; 
+  48   1        TR0=1;
+  49   1      }
+  50          
+  51          void T0INT() interrupt 1
+  52          {
+  53   1      TH0=(65536-50000) / 256;
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:21:41 PAGE 2   
+
+  54   1      TL0=(65536-50000) % 256;   //定时为50ms
+  55   1      flag++;
+  56   1        if(flag==20)//总共为1s
+  57   1        {
+  58   2          flag=0;
+  59   2          num--;
+  60   2          if(num == 0&&(a%4==0||a%4==2)) //
+  61   2          {
+  62   3            num = 5;
+  63   3            a++;
+  64   3          } else if (num == 0 && a%2 == 1){ //
+  65   3            num =10;
+  66   3            a++;
+  67   3          }
+  68   2          switch (a%4)
+  69   2             {
+  70   3             case 0: //南北绿,东西红
+  71   3              N_RED = 1;N_GREEN = 0; 
+  72   3              E_RED = 0;E_GREEN = 1; 
+  73   3              Yellow = 1;
+  74   3              break;
+  75   3             case 1: //黄,东西红
+  76   3              N_RED=1;   N_GREEN=1; 
+  77   3              E_RED=0;   E_GREEN=1; 
+  78   3              Yellow=~Yellow;
+  79   3              break;
+  80   3             case 2: //南北红,东西绿
+  81   3              N_RED = 0; N_GREEN = 1;
+  82   3              E_RED = 1; E_GREEN = 0; 
+  83   3              Yellow=1;
+  84   3              break;
+  85   3             case 3: //南北红，黄
+  86   3              N_RED = 0;N_GREEN = 1; 
+  87   3              E_RED = 1;E_GREEN = 1;
+  88   3              Yellow=~Yellow;
+  89   3              break;
+  90   3            }
+  91   2        }
+  92   1      }
+  93          
+  94          
+  95          //主程序
+  96          void main(){
+  97   1        T0INTinit();
+  98   1        while(1){ 
+  99   2          P0=0x00; //消影
+ 100   2          shi = num / 10;
+ 101   2          ge = num % 10;
+ 102   2          switch(count){  
+ 103   3            //让数码管一起亮
+ 104   3            case 0: HCC=1; HCB=0; HCA=1; P0=ledTab[shi]; break;
+ 105   3            case 1: HCC=1; HCB=0; HCA=0; P0=ledTab[ge]; break;
+ 106   3            case 2: HCC=0; HCB=0; HCA=1; P0=ledTab[shi]; break;
+ 107   3            case 3: HCC=0; HCB=0; HCA=0; P0=ledTab[ge]; break;
+ 108   3          }
+ 109   2          count++;
+ 110   2          if(count>3) count=0;
+ 111   2        }
+ 112   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:21:41 PAGE 3   
+
+   CODE SIZE        =    250    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

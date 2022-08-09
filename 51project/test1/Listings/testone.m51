@@ -1,0 +1,163 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        05/14/2022  23:05:01  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj TO .\Objects\testone PRINT (.\Listings\testone.m51) 
+>> RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\main.obj (MAIN)
+  E:\KEIL5\C51\LIB\C51FPS.LIB (?C?FCAST)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?CSTPTR)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?IMUL)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?LNEG)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?LSTPTR)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?LSTIDATA)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?LSTXDATA)
+  E:\KEIL5\C51\LIB\C51S.LIB (?C?LSTPDATA)
+
+
+LINK MAP OF MODULE:  .\Objects\testone (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         _DATA_GROUP_
+            IDATA   000EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00C7H     UNIT         ?C?LIB_CODE
+            CODE    00CAH     0043H     UNIT         ?PR?MAIN?MAIN
+            CODE    010DH     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\testone (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                  0008H    0006H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\testone (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/14/2022  23:05:01  PAGE 2
+
+
+
+  -------         MODULE        ?C_STARTUP
+  C:010DH         SEGMENT       ?C_C51STARTUP
+  I:000EH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0110H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:010DH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:010DH         LINE#         133
+  C:010FH         LINE#         134
+  C:0110H         LINE#         135
+  C:0111H         LINE#         136
+  C:0113H         LINE#         185
+  C:0116H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:00CAH         PUBLIC        main
+  -------         PROC          MAIN
+  -------         DO            
+  D:0003H         SYMBOL        n
+  D:0008H         SYMBOL        ptr
+  D:000BH         SYMBOL        ptr2
+  D:0004H         SYMBOL        f
+  -------         ENDDO         
+  C:00CAH         LINE#         3
+  C:00CAH         LINE#         4
+  C:00CAH         LINE#         7
+  C:00D3H         LINE#         8
+  C:00DCH         LINE#         11
+  C:00E7H         LINE#         12
+  C:00F1H         LINE#         14
+  C:0104H         LINE#         15
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?FCAST
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/14/2022  23:05:01  PAGE 3
+
+
+  C:000DH         PUBLIC        ?C?FCASTC
+  C:0008H         PUBLIC        ?C?FCASTI
+  C:0003H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CLDPTR
+  C:0041H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:005AH         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?IMUL
+  C:006CH         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?LNEG
+  C:007EH         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LSTPTR
+  C:008CH         PUBLIC        ?C?LSTPTR
+  -------         ENDMOD        ?C?LSTPTR
+
+  -------         MODULE        ?C?LSTIDATA
+  C:00A6H         PUBLIC        ?C?LSTIDATA
+  -------         ENDMOD        ?C?LSTIDATA
+
+  -------         MODULE        ?C?LSTXDATA
+  C:00B2H         PUBLIC        ?C?LSTXDATA
+  -------         ENDMOD        ?C?LSTXDATA
+
+  -------         MODULE        ?C?LSTPDATA
+  C:00BEH         PUBLIC        ?C?LSTPDATA
+  -------         ENDMOD        ?C?LSTPDATA
+
+Program Size: data=15.0 xdata=0 code=281
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

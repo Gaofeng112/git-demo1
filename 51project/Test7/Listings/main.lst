@@ -1,0 +1,218 @@
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:15:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*#include <REGX52.H>
+   2          typedef unsigned char uchar;
+   3          typedef unsigned int  uint;
+   4          
+   5          sbit diy = P2_0; //数码管的位选
+   6          sbit die = P2_1;
+   7          
+   8          uchar dat; //计时数
+   9          //将数码管0-9装入数组中
+  10          unsigned int table[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+  11          uchar a=30,b=30,c=5,d=5;
+  12          
+  13          void smg(uchar dat){ //数码管的显示函数
+  14            ucahr a,b;
+  15            a=dat%100/10;        //将dat数据拆分个位与十位
+  16            b=dat%100%10/1;
+  17            diy=0;die=1;         //第一位数码管不亮第二位数码管亮
+  18            P1=~table[a];
+  19            delay(10);
+  20            diy=1;die=0;
+  21            P1=~table[b];
+  22            delay(10);    //消影
+  23            P1=0x00;
+  24          }
+  25          
+  26          void init(){
+  27            TMOD&=0x0F;
+  28            TMOD|=0x01;       //设置T0的模式
+  29              
+  30          }
+  31          
+  32          void delay(uint m)//延时程序
+  33          {
+  34            unsigned int i,j;
+  35            for(i=0;i<m;i++)
+  36            for(j=0;j<255;j++);
+  37          }
+  38          
+  39          void main()
+  40          {
+  41            while(1)
+  42            {
+  43              //轮流给送值P1口
+  44              P1=0xc9;
+  45              delay();
+  46              P1=0xa9;
+  47              delay();
+  48              P1=0x9c;
+  49              delay();
+  50              P1=0x9a;
+  51              delay();
+  52            }
+  53          }
+  54          */
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:15:36 PAGE 2   
+
+  55          //??: LED?????
+  56          #include <REGX52.H>
+  57          #define uint unsigned int
+  58          #define uchar unsigned char
+  59          #define SEG P3
+  60          
+  61          sbit E_RED=P0^0;      //东西红灯
+  62          sbit E_YELLOW=P0^1;   //东西黄灯
+  63          sbit E_GREEN=P0^2;    //东西绿灯
+  64          sbit N_RED=P0^3;      //南北红灯
+  65          sbit N_YELLOW=P0^4;   //南北黄灯
+  66          sbit N_GREEN=P0^5;    //南北绿灯
+  67          
+  68          sbit btn = P1^0; //外部中断开关
+  69          
+  70          
+  71          sbit SCON1 = P2^0;      //控制数码管的个位十位显示
+  72          sbit SCON2 = P2^1;
+  73          
+  74          uchar num=10,ge,shi;      //定义倒计时初始值，个位十位
+  75          uchar a=0;                //定义亮灯的四种情况  
+  76          uchar count=0;            //用来显示数码管的变量
+  77          uchar flag;               //看倒计时是否为1s
+  78          
+  79          //LED的9个数字
+  80          unsigned char code ledTab[]={
+  81            0xC0, // 1100 0000 数字0
+  82            0xF9, // 1111 1001 数字1
+  83            0xA4, // 1010 0100 数字2
+  84            0xB0, // 1011 0000 数字3
+  85            0x99, // 1001 1001 数字4
+  86            0x92, // 1001 0010 数字5
+  87            0x82, // 1000 0010 数字6
+  88            0xF8, // 1111 1000 数字7
+  89            0x80, // 1000 0000 数字8
+  90            0x90  // 1001 0000 数字9
+  91          };  
+  92          
+  93          
+  94          
+  95          //1s延迟  
+  96          void Delay_Ms(uint x){
+  97   1        uchar t;
+  98   1        while(x--)
+  99   1        {
+ 100   2          for(t=50;t>0;t--);
+ 101   2        }
+ 102   1      }
+ 103          
+ 104          int0()interrupt 0
+ 105          {
+ 106   1        TR0=~TR0;
+ 107   1      }
+ 108          
+ 109          //紧急开关
+ 110          void stop(){
+ 111   1        if(btn==0){
+ 112   2          Delay_Ms(1000);  //取消抖动
+ 113   2          TR0=~TR0;           //停止倒计时
+ 114   2          N_RED = 0;N_YELLOW = 1;N_GREEN = 1;
+ 115   2          E_RED = 0;E_YELLOW = 1;E_GREEN = 1;
+ 116   2        }
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:15:36 PAGE 3   
+
+ 117   1      }
+ 118          
+ 119          
+ 120          
+ 121          void T0INTinit() //定时器T0初始化为1s
+ 122          {
+ 123   1        TMOD=0x01;
+ 124   1        TH0=(65536-50000)/256;
+ 125   1        TL0=(65536-50000)%256;
+ 126   1        EA=1;  
+ 127   1        ET0=1; 
+ 128   1        TR0=1;
+ 129   1      }
+ 130          
+ 131          void T0INT() interrupt 1
+ 132          {
+ 133   1      TH0=(65536-50000) / 256;
+ 134   1      TL0=(65536-50000) % 256;   //定时为50ms
+ 135   1      flag++;
+ 136   1        if(flag==20)//总共为1s
+ 137   1        {
+ 138   2          flag=0;
+ 139   2          num--;
+ 140   2          if(num == 0&&(a%4==0||a%4==2)) //???????
+ 141   2          {
+ 142   3            num = 5;
+ 143   3            a++;
+ 144   3          } else if (num == 0 && a%2 == 1){ //????????
+ 145   3            num =10;
+ 146   3            a++;
+ 147   3          }
+ 148   2          switch (a%4)
+ 149   2             {
+ 150   3             case 0: //南北绿,东西红
+ 151   3              N_RED = 1;N_YELLOW = 1;N_GREEN = 0; 
+ 152   3              E_RED = 0;E_YELLOW = 1;E_GREEN = 1; 
+ 153   3              break;
+ 154   3             case 1: //南北黄,东西红
+ 155   3              N_RED=1;  N_YELLOW = ~N_YELLOW ; N_GREEN=1; 
+ 156   3              E_RED=0;  E_YELLOW = 1; E_GREEN=1; 
+ 157   3              break;
+ 158   3             case 2: //南北红,东西绿
+ 159   3              N_RED = 0;N_YELLOW = 1; N_GREEN = 1;
+ 160   3              E_RED = 1; E_YELLOW =1; E_GREEN = 0; 
+ 161   3              break;
+ 162   3             case 3: //南北红，东西黄
+ 163   3              N_RED = 0;N_YELLOW = 1; N_GREEN = 1; 
+ 164   3              E_RED = 1;E_YELLOW = ~N_YELLOW ; E_GREEN = 1;
+ 165   3              break;
+ 166   3            }
+ 167   2        }
+ 168   1      }
+ 169          
+ 170          
+ 171          //主程序
+ 172          void main(){
+ 173   1        T0INTinit();
+ 174   1        while(1){ 
+ 175   2          stop();
+ 176   2          SEG=0xff; //消影
+ 177   2          shi = num / 10;
+ 178   2          ge = num % 10;
+C51 COMPILER V9.54   MAIN                                                                  06/30/2022 15:15:36 PAGE 4   
+
+ 179   2          switch(count){  
+ 180   3            //让数码管一起亮
+ 181   3            case 0: SCON1=0; SCON2=1; SEG=ledTab[ge]; break;
+ 182   3            case 1: SCON1=1; SCON2=0; SEG=ledTab[shi]; break;
+ 183   3          }
+ 184   2          count++;
+ 185   2          if(count>1) count=0;
+ 186   2        }
+ 187   1      }
+ 188          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    268    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,100 @@
+C51 COMPILER V9.54   MAIN                                                                  05/29/2022 13:24:28 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          
+   3          void main()
+   4          {
+   5   1        data unsigned int a,k,*P3;   //定义内部RAM
+   6   1        data char i,*P1,*P2;         //其他变量21H和20H
+   7   1        P1=0x20;
+   8   1        P2=0x21;
+   9   1        P3=0x30;
+  10   1        
+  11   1        *P3=0100100101010;      //赋值一个二进制数
+  12   1        a=*P3;
+  13   1        k = 10000;
+  14   1        
+  15   1        while(a/k==0)k=k/10;
+  16   1        for(i=0;a!=0;i++)
+  17   1        {   
+  18   2          *P2=a/k;              //记录十进制的值
+  19   2          a=a%k;
+  20   2          P2++;
+  21   2          k=k/10;
+  22   2        } 
+  23   1        *P1=i;                  //记录长度
+  24   1      }
+  25          
+  26          
+  27          
+  28            
+  29          
+  30          /*#include<reg51.h>
+  31          #include<absacc.h>
+  32          
+  33          
+  34          void main()
+  35          {
+  36            int data m_at_30H;
+  37            
+  38            data unsigned char * p =30H;  //30H单元
+  39            unsigned int q = 0B01;        //两个字节二进制
+  40            *p=q;                         //内部RAM 30H单元存放二进制数
+  41            
+  42            DWORD[30H]=0B01;              //30H存储了一个两个字节二进制
+  43            
+  44            
+  45          }
+  46          */
+  47          /*#include<reg51.h>
+  48          #define uchar unsigned char
+  49          #define uint unsigned int
+  50          uchar data *d1,*d2;
+  51          uint dat;
+  52          main()
+  53          {
+  54          uchar temp[5],i,l;
+C51 COMPILER V9.54   MAIN                                                                  05/29/2022 13:24:28 PAGE 2   
+
+  55          d1=0x30;
+  56          d2=0x20;
+  57          dat=*d1*256+*(d1+1);
+  58          temp[0]=dat/10000;
+  59          temp[1]=dat%10000/1000;
+  60          temp[2]=dat%1000/100;
+  61          temp[3]=dat%100/10;
+  62          temp[4]=dat%10;
+  63          for(i=0;i<5;i++)if(temp[i]!=0)break;
+  64          l=5-i;
+  65          *d2=l;
+  66          d2++;
+  67              do{
+  68              *d2=temp[i];
+  69              d2++;
+  70              i++;
+  71              }while(i<5);
+  72          while(1);
+  73          }
+  74          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    163    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      11
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

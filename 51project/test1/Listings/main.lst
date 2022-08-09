@@ -1,0 +1,41 @@
+C51 COMPILER V9.54   MAIN                                                                  05/14/2022 23:05:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          
+   3          void main()
+   4          {
+   5   1        
+   6   1        char  n;             //中间变量用于储存值
+   7   1        char *ptr=0x25;      //25H单元
+   8   1        float *ptr2=0x30;    //30H单元
+   9   1        float f;             //中间变量
+  10   1        
+  11   1        *ptr=6;              //赋值一个10以内的整数
+  12   1        n=*ptr;              //n来存6的值
+  13   1        
+  14   1        f=n*n;               //f用来存平方后的值
+  15   1        *ptr2=f;             //再将平方后的值赋值给ptr2
+  16   1        
+  17   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     67    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

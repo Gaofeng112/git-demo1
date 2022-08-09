@@ -1,0 +1,1 @@
+"new.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\new.lst) TABS (2) OBJECT(.\Objects\new.obj)
